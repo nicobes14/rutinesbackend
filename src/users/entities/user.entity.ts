@@ -1,4 +1,10 @@
-import { BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Rutine } from 'src/rutine/entities/rutine.entity';
 
 @Table

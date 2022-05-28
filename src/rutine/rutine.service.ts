@@ -17,7 +17,9 @@ export class RutineService {
   }
 
   async findAll(): Promise<Rutine[]> {
-    return this.rutinesRepository.findAll<Rutine>({ include: [{ association: 'exercises' }] });
+    return this.rutinesRepository.findAll<Rutine>({
+      include: [{ association: 'exercises' }],
+    });
   }
 
   async findOne(id: number): Promise<Rutine> {

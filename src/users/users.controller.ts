@@ -26,7 +26,8 @@ export class UsersController {
   @Get()
   async findAll() {
     const users = await this.usersService.findAll();
-    if (users.length === 0) throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+    if (users.length === 0)
+      throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
     return users;
   }
 
@@ -45,7 +46,8 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const deletedUser = await this.usersService.remove(+id);
-    if (deletedUser === 0) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    if (deletedUser === 0)
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     return deleted('user');
   }
 }

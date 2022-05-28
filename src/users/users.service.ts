@@ -15,7 +15,9 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.usersRepository.findAll<User>({ include: [{ association: 'rutine' }] });
+    return this.usersRepository.findAll<User>({
+      include: [{ association: 'rutine' }],
+    });
   }
 
   async findOne(id: number): Promise<User> {
@@ -24,7 +26,10 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const { username, password, rutineId } = updateUserDto;
-    return this.usersRepository.update({ username, password, rutineId }, { where: { id } });
+    return this.usersRepository.update(
+      { username, password, rutineId },
+      { where: { id } },
+    );
   }
 
   async remove(id: number): Promise<number> {
