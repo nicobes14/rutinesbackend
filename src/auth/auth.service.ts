@@ -14,31 +14,50 @@ export class AuthService {
   ) {}
   async registerUser(user: RegisterAuthDTO) {
     const hashPassword = hashSync(user.password, 10);
-    const userCreated = await this.usersRepository.create({
-      username: user.username,
-      password: hashPassword,
-    });
-    if (userCreated)
-      return {
-        access_token: this.jwtService.sign({
-          username: userCreated.username,
-          sub: userCreated.id,
-        }),
-      };
-    throw new HttpException('User not created', 401);
+    try {
+      const userCreated = await this.usersRepository.create({
+        username: user.username,
+        password: hashPassword,
+        roles: ['user'],
+      });
+      if (userCreated)
+        return {
+          access_token: this.jwtService.sign({
+            username: userCreated.username,
+            sub: userCreated.id,
+            roles: userCreated.roles,
+          }),
+        };
+      throw new HttpException('User not created', 401);
+    } catch (err) {
+      const { errors } = err;
+      errors?.forEach((error) => {
+        error.instance = undefined;
+      });
+      throw new HttpException(errors || err, errors ? 401 : 500);
+    }
   }
   async loginUser(user: LoginAuthDTO) {
-    const userFound = await this.usersRepository.findOne({
-      where: { username: user.username },
-    });
-    if (userFound && compareSync(user.password, userFound.password)) {
-      return {
-        access_token: this.jwtService.sign({
-          username: userFound.username,
-          sub: userFound.id,
-        }),
-      };
+    try {
+      const userFound = await this.usersRepository.findOne({
+        where: { username: user.username },
+      });
+      if (userFound && compareSync(user.password, userFound.password)) {
+        return {
+          access_token: this.jwtService.sign({
+            username: userFound.username,
+            sub: userFound.id,
+            roles: userFound.roles,
+          }),
+        };
+      }
+      throw new HttpException('Invalid credentials', 401);
+    } catch (err) {
+      const { errors } = err;
+      errors?.forEach((error) => {
+        error.instance = undefined;
+      });
+      throw new HttpException(errors || err, errors ? 401 : 500);
     }
-    throw new HttpException('Invalid credentials', 401);
   }
 }
