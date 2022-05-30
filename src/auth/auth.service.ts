@@ -14,10 +14,18 @@ export class AuthService {
   ) {}
   async registerUser(user: RegisterAuthDTO) {
     const hashPassword = hashSync(user.password, 10);
-    return await this.usersRepository.create({
+    const userCreated = await this.usersRepository.create({
       username: user.username,
       password: hashPassword,
     });
+    if (userCreated)
+      return {
+        access_token: this.jwtService.sign({
+          username: userCreated.username,
+          sub: userCreated.id,
+        }),
+      };
+    throw new HttpException('User not created', 401);
   }
   async loginUser(user: LoginAuthDTO) {
     const userFound = await this.usersRepository.findOne({
