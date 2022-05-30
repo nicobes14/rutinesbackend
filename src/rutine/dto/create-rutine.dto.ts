@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 export class CreateRutineDto {
   @ApiProperty({
     example: 'Rutina de ejercicios',
@@ -8,7 +8,9 @@ export class CreateRutineDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
   @ApiProperty({ example: [1, 2, 33], description: 'exercises of the rutine' })
   @IsNumber({}, { each: true })
+  @IsOptional()
   exercisesIds: number[];
 }

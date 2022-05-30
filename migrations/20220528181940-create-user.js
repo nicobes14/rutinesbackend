@@ -21,13 +21,6 @@ module.exports = {
         type: Sequelize.JSON, // .ARRAY NOT WORKING
         allowNull: true,
       },
-      rutineId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'rutines',
-          key: 'id',
-        },
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

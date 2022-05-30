@@ -13,23 +13,37 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { RutineService } from './rutine.service';
 import { CreateRutineDto } from './dto/create-rutine.dto';
 import { UpdateRutineDto } from './dto/update-rutine.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guards';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/auth/roles/roles.enum';
 
 @ApiBearerAuth()
 @ApiTags('rutines')
 @Controller('rutines')
 export class RutineController {
   constructor(private readonly rutineService: RutineService) {}
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
   @Post()
   @ApiOperation({ summary: 'Create a rutine' })
   @ApiResponse({ status: 201, description: 'Rutine created' })
-  create(@Body() createRutineDto: CreateRutineDto) {
-    return this.rutineService.create(createRutineDto);
+  async create(@Body() createRutineDto: CreateRutineDto, @Req() request: any) {
+    const { authorization } = request.headers;
+    const result = await this.rutineService.create(
+      createRutineDto,
+      authorization,
+    );
+    if (!result)
+      throw new HttpException('Rutine already exists', HttpStatus.BAD_REQUEST);
+    return result;
   }
   @UseGuards(JwtAuthGuard)
   @Get()

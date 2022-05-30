@@ -2,6 +2,8 @@ import { Exercise } from './../../exercise/entities/exercise.entity';
 import {
   BelongsToMany,
   Column,
+  DataType,
+  ForeignKey,
   HasMany,
   Model,
   Table,
@@ -12,7 +14,15 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Table
 export class Rutine extends Model {
-  @Column
+  @ForeignKey(() => User)
+  @Column({
+    references: { model: 'users', key: 'id' },
+    allowNull: false,
+    type: DataType.INTEGER,
+  })
+  creatorId: number;
+
+  @Column({ allowNull: false, type: DataType.STRING, unique: true })
   @ApiProperty({
     example: 'Rutina de ejercicios',
     description: 'name of the rutine',
