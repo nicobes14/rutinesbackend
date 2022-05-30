@@ -25,4 +25,22 @@ export class AuthController {
   async loginUser(@Body() userObject: RegisterAuthDTO) {
     return await this.authService.loginUser(userObject);
   }
+
+  @Post('refresh')
+  @ApiOperation({ summary: 'Refresh token' })
+  @ApiResponse({
+    status: 201,
+    description: 'Token refreshed',
+    type: JWTResponse,
+  })
+  async refreshToken(@Body() userObject: RegisterAuthDTO) {
+    return await this.authService.refreshToken(userObject);
+  }
+
+  @Post('logout')
+  @ApiOperation({ summary: 'Logout' })
+  @ApiResponse({ status: 201, description: 'User logged out' })
+  async logoutUser(@Body() userObject: RegisterAuthDTO) {
+    return await this.authService.logoutUser(userObject);
+  }
 }

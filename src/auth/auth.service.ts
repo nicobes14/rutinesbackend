@@ -7,6 +7,12 @@ import { LoginAuthDTO } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
+  logoutUser(userObject: RegisterAuthDTO) {
+    throw new Error('Method not implemented.');
+  }
+  refreshToken(userObject: RegisterAuthDTO) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @Inject('USERS_REPOSITORY')
     private usersRepository: typeof User,

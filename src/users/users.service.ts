@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
@@ -7,6 +8,7 @@ export class UsersService {
   constructor(
     @Inject('USERS_REPOSITORY')
     private usersRepository: typeof User,
+    private jwtService: JwtService,
   ) {}
 
   async findAll(): Promise<User[]> {
