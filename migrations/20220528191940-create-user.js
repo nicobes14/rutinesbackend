@@ -17,9 +17,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      role:{
-        type: Sequelize.STRING,
-        allowNull: false
+      roles:{
+        type: Sequelize.JSON, // .ARRAY NOT WORKING
+        allowNull: true,
       },
       rutineId: {
         type: Sequelize.INTEGER,
