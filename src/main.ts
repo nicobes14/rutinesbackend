@@ -8,12 +8,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const options = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Backend of the application')
     .setDescription('The rutines API description')
     .setVersion('1.0')
+    .addTag('auth')
     .addTag('users')
     .addTag('rutines')
-    //.addTag('auth')
     .addTag('exercises')
     .addBearerAuth()
     .build();
