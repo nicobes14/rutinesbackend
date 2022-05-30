@@ -21,6 +21,9 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GetUserDto } from './dto/get-user.dto';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guards';
+import { Role } from 'src/auth/roles/roles.enum';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -28,7 +31,8 @@ import { GetUserDto } from './dto/get-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Users found', type: [GetUserDto] })
@@ -40,7 +44,8 @@ export class UsersController {
     return users;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResponse({ status: 200, description: 'User found', type: GetUserDto })

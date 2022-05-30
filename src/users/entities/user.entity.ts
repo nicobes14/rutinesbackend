@@ -16,8 +16,8 @@ export class User extends Model {
   @Column({ allowNull: false, type: DataType.STRING })
   password: string;
 
-  @Column({ allowNull: false, type: DataType.STRING })
-  role: string;
+  @Column({ allowNull: false, type: DataType.JSON })
+  roles: string[];
 
   @ForeignKey(() => Rutine)
   @Column({

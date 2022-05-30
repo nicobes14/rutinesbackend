@@ -11,6 +11,6 @@ export class LoginAuthDTO {
   @ApiProperty()
   @IsNotEmpty()
   @MinLength(6)
-  @MaxLength(12)
+  @MaxLength(100)
   password: string;
 }

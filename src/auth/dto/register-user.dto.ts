@@ -11,6 +11,6 @@ export class RegisterAuthDTO {
   @ApiProperty({ example: 'Thepassword123', description: 'The password' })
   @IsNotEmpty()
   @MinLength(6)
-  @MaxLength(12)
+  @MaxLength(100)
   password: string;
 }
