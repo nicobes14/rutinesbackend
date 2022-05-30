@@ -20,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { GetUserDto } from './dto/get-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -30,7 +31,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'Users found' })
+  @ApiResponse({ status: 200, description: 'Users found', type: [GetUserDto] })
   @ApiResponse({ status: 404, description: 'Users not found' })
   async findAll() {
     const users = await this.usersService.findAll();
@@ -42,7 +43,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
-  @ApiResponse({ status: 200, description: 'User found' })
+  @ApiResponse({ status: 200, description: 'User found', type: GetUserDto })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(+id);

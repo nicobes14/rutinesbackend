@@ -16,10 +16,18 @@ module.exports = {
         rutineId: {
           type: Sequelize.INTEGER,
           primaryKey: true,
+          references: {
+            model: 'rutines',
+            key: 'id',
+          },
         },
         exerciseId: {
           type: Sequelize.INTEGER,
           primaryKey: true,
+          references: {
+            model: 'exercises',
+            key: 'id',
+          },
         },
       }
     );

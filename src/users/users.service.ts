@@ -12,11 +12,14 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return this.usersRepository.findAll<User>({
       include: [{ association: 'rutine' }],
+      attributes: { exclude: ['password'] },
     });
   }
 
   async findOne(id: number): Promise<User> {
-    return this.usersRepository.findByPk<User>(id);
+    return this.usersRepository.findByPk<User>(id, {
+      attributes: { exclude: ['password'] },
+    });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

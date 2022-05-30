@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   BelongsTo,
   Column,
+  DataType,
   ForeignKey,
   Model,
   Table,
@@ -10,14 +10,21 @@ import { Rutine } from 'src/rutine/entities/rutine.entity';
 
 @Table
 export class User extends Model {
-  @Column
+  @Column({ allowNull: false, unique: true, type: DataType.STRING })
   username: string;
 
-  @Column
+  @Column({ allowNull: false, type: DataType.STRING })
   password: string;
 
+  @Column({ allowNull: false, type: DataType.STRING })
+  role: string;
+
   @ForeignKey(() => Rutine)
-  @Column
+  @Column({
+    references: { model: 'rutines', key: 'id' },
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
   rutineId: number;
 
   @BelongsTo(() => Rutine)

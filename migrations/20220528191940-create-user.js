@@ -17,10 +17,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      role:{
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       rutineId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
+          model: 'rutines',
           key: 'id',
         },
       },
