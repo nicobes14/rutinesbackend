@@ -30,11 +30,13 @@ import { Role } from 'src/auth/roles/roles.enum';
 @Controller('rutines')
 export class RutineController {
   constructor(private readonly rutineService: RutineService) {}
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @Post()
   @ApiOperation({ summary: 'Create a rutine' })
   @ApiResponse({ status: 201, description: 'Rutine created' })
+  @ApiResponse({ status: 400, description: 'Rutine already exists' })
   async create(@Body() createRutineDto: CreateRutineDto, @Req() request: any) {
     const { authorization } = request.headers;
     const result = await this.rutineService.create(
@@ -45,7 +47,8 @@ export class RutineController {
       throw new HttpException('Rutine already exists', HttpStatus.BAD_REQUEST);
     return result;
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
   @Get()
   @ApiOperation({ summary: 'Get all rutines' })
   @ApiResponse({ status: 200, description: 'Rutines found' })

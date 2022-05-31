@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { Exercise } from './entities/exercise.entity';
@@ -8,10 +9,25 @@ export class ExerciseService {
   constructor(
     @Inject('EXERCISES_REPOSITORY')
     private exercisesProvider: typeof Exercise,
+    private jwtService: JwtService,
   ) {}
-  create(createExerciseDto: CreateExerciseDto): Promise<Exercise> {
+
+  async create(
+    createExerciseDto: CreateExerciseDto,
+    auth: string,
+  ): Promise<Exercise> {
+    const creatorId = this.jwtService.decode(auth.split(' ')[1]).sub;
     const { name, type } = createExerciseDto;
-    return this.exercisesProvider.create({ name, type });
+    const [exerciseCreated, created] =
+      await this.exercisesProvider.findOrCreate({
+        where: { name },
+        defaults: { name, type, creatorId },
+      });
+    if (created) {
+      return exerciseCreated;
+    } else {
+      return undefined;
+    }
   }
 
   findAll(): Promise<Exercise[]> {

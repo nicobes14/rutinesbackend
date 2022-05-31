@@ -12,7 +12,10 @@ export class RutineService {
     private jwtService: JwtService,
   ) {}
 
-  async create(createRutineDto: CreateRutineDto, auth): Promise<Rutine> {
+  async create(
+    createRutineDto: CreateRutineDto,
+    auth: string,
+  ): Promise<Rutine> {
     const creatorId = this.jwtService.decode(auth.split(' ')[1]).sub;
     const { name, exercisesIds } = createRutineDto;
     const [rutineCreated, created] = await this.rutinesRepository.findOrCreate({
@@ -31,7 +34,12 @@ export class RutineService {
 
   async findAll(): Promise<Rutine[]> {
     return this.rutinesRepository.findAll<Rutine>({
-      include: [{ association: 'exercises' }],
+      include: [
+        {
+          association: 'exercises',
+          attributes: ['id', 'name'],
+        },
+      ],
     });
   }
 
